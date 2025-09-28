@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Good Luck, Janelah!</title>
+<style>
+  :root{
+    --bg1:#f3fbff;
+    --bg2:#eefaf2;
+    --accent:#0b6b9a;
+    --accent2:#16a085;
+    --muted:#444;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:linear-gradient(180deg,var(--bg1),var(--bg2));display:flex;align-items:center;justify-content:center;padding:20px;}
+  .card{width:100%;max-width:820px;background:rgba(255,255,255,0.98);border-radius:16px;box-shadow:0 12px 36px rgba(6,24,40,0.12);padding:34px;position:relative;overflow:hidden}
+  .header{display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .badge{width:72px;height:72px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:700;box-shadow:0 6px 18px rgba(10,80,120,0.12)}
+  h1{margin:0;font-size:1.8rem;color:var(--accent);text-align:center}
+  p.lead{margin:12px 0 20px 0;color:var(--muted);text-align:center;line-height:1.45}
+  .btns{display:flex;gap:12px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+  .btn{background:linear-gradient(90deg,var(--accent2),var(--accent));color:white;border:none;padding:12px 18px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 22px rgba(10,80,120,0.12);transition:transform .12s}
+  .btn:active{transform:translateY(2px)}
+  .message{margin-top:18px;opacity:0;transform:translateY(10px);transition:all .45s cubic-bezier(.2,.9,.3,1);text-align:center}
+  .message.show{opacity:1;transform:translateY(0)}
+  .message h2{margin:0 0 8px 0;color:#0a3a4d}
+  .message p{margin:0;color:#333}
+  .small{font-size:.9rem;color:#666;margin-top:10px;text-align:center}
+
+  /* confetti pieces */
+  .confetti{position:absolute;inset:0;pointer-events:none;overflow:visible}
+  .confetti-piece{position:absolute;width:9px;height:14px;border-radius:2px;will-change:transform,top,left;opacity:.95}
+
+  @media (max-width:480px){
+    .badge{width:58px;height:58px}
+    h1{font-size:1.4rem}
+    .btn{padding:10px 14px}
+  }
+</style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Good luck card">
+    <div class="header">
+      <div class="badge" aria-hidden="true">
+        <!-- compass icon -->
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+          <path d="M12 7l3 6-6 3 3-9z" fill="white"/>
+        </svg>
+      </div>
+      <div style="min-width:200px">
+        <h1>Good luck, Bhest!</h1>
+        <p class="lead">Tomorrow’s the big day — the board exam for Geodetic Engineering. I believe in your work, your grit, and your brilliant mind.</p>
+      </div>
+    </div>
+
+    <div class="btns" role="toolbar" aria-label="Actions">
+      <button class="btn" id="revealBtn">Open your message</button>
+      <button class="btn" id="hintBtn">Quick breathing tip</button>
+    </div>
+
+    <div class="message" id="message" role="status" aria-live="polite">
+      <h2>You've got this, future Engr. Janelah Paclibar!</h2>
+      <p>
+        Tomorrow you’ll walk in with everything you’ve prepared — You’ve poured so much heart, 
+sleepless nights, and determination into this journey — and now it’s your time to shine. 
+Walk in with confidence, knowing you carry not only your knowledge, but also your dreams and the love of those cheering for you. 
+No exam can measure your passion and dedication. 
+I believe in you deeply — go and claim the success you’ve worked so hard for. ✨🗺️
+      </p>
+    </div>
+
+    <div class="small">Tip: open the page on the exam day to boost her confidence — it displays confetti automatically.</div>
+
+    <div class="confetti" id="confettiArea" aria-hidden="true"></div>
+  </div>
+
+<script>
+(function(){
+  const colors = ["#0b6b9a","#16a085","#f39c12","#e74c3c","#8e44ad","#2ecc71"];
+  const card = document.querySelector('.card');
+  const confettiArea = document.getElementById('confettiArea');
+  const btn = document.getElementById('revealBtn');
+  const hint = document.getElementById('hintBtn');
+  const msg = document.getElementById('message');
+
+  function makeConfettiBurst(count=36){
+    const rect = card.getBoundingClientRect();
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.background = colors[Math.floor(Math.random()*colors.length)];
+      const startX = Math.random() * rect.width;
+      el.style.left = startX + 'px';
+      el.style.top = '-30px';
+      el.style.width = (6 + Math.random()*12) + 'px';
+      el.style.height = (8 + Math.random()*16) + 'px';
+      el.style.borderRadius = (Math.random()*4) + 'px';
+      confettiArea.appendChild(el);
+      animateConfetti(el, rect);
+      setTimeout(()=> el.remove(),5200);
+    }
+  }
+
+  function animateConfetti(el, rect){
+    const duration = 3800 + Math.random()*1200;
+    const startLeft = parseFloat(el.style.left);
+    const endLeft = startLeft + (Math.random()*360 - 180);
+    const startTop = -30;
+    const endTop = rect.height + 40 + Math.random()*80;
+    const startRotate = Math.random()*360;
+    const endRotate = startRotate + (Math.random()*1080 - 540);
+    const start = performance.now();
+    function frame(now){
+      const t = Math.min(1,(now-start)/duration);
+      const ease = (--t)*t*t+1;
+      const curTop = startTop + (endTop-startTop)*ease;
+      const curLeft = startLeft + (endLeft-startLeft)*ease;
+      const curRot = startRotate + (endRotate-startRotate)*ease;
+      el.style.top = curTop + 'px';
+      el.style.left = curLeft + 'px';
+      el.style.transform = `rotate(${curRot}deg)`;
+      if(now - start < duration) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  btn.addEventListener('click', function(){
+    msg.classList.add('show');
+    btn.disabled = true;
+    btn.textContent = "Cheered! 🎉";
+    makeConfettiBurst(28);
+    setTimeout(()=> makeConfettiBurst(18),600);
+  });
+
+  hint.addEventListener('click', function(){
+    alert("Try 4-4-4 breathing:\nInhale 4s → Hold 4s → Exhale 4s. Repeat 3 times to calm nerves.");
+  });
+
+  window.addEventListener('load', function(){
+    setTimeout(()=> makeConfettiBurst(40), 300);
+  });
+})();
+</script>
+</body>
+</html>
